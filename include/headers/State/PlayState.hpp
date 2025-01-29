@@ -25,7 +25,6 @@ private:
 
     int cellW = 0;
     int cellH = 0;
-    int radius = 1;
     int liveRange[2] = {2, 3};
 };
 

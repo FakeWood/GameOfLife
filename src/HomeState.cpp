@@ -19,12 +19,24 @@ bool HomeState::enter()
 {
     // create setting items
     int itemWidth = 300;
-    int itemHeight = 200;
+    int itemHeight = 120;
     int itemX = (Global::gSCREEN_WIDTH - itemWidth) / 2;
-    int itemY = (Global::gSCREEN_HEIGHT - itemHeight) / 2;
+    int itemY = (Global::gSCREEN_HEIGHT - itemHeight * 4) / 2;
 
-    settingItem = new SettingItem(itemX, itemY, itemWidth, itemHeight);
-    entities.emplace_back(settingItem);
+    setFPS = new SettingItem(&Global::gFPS, "FPS", 1, itemX, itemY, itemWidth, itemHeight);
+    entities.emplace_back(setFPS);
+
+    itemY += itemHeight;
+    setAmount = new SettingItem(&Global::gCellAmount, "Cell Amount", 50, itemX, itemY, itemWidth, itemHeight);
+    entities.emplace_back(setAmount);
+
+    itemY += itemHeight;
+    setRadius = new SettingItem(&Global::gRadius, "Field Size", 1, itemX, itemY, itemWidth, itemHeight);
+    entities.emplace_back(setRadius);
+
+    itemY += itemHeight;
+    setCellSize = new SettingItem(&Global::gCellSize, "Cell Size", 1, itemX, itemY, itemWidth, itemHeight);
+    entities.emplace_back(setCellSize);
 
     return true;
 }

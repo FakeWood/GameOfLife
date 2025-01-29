@@ -22,7 +22,10 @@ private:
     static HomeState sHomeState;
     HomeState();
 
-    SettingItem *settingItem;
+    SettingItem *setFPS;
+    SettingItem *setAmount;
+    SettingItem *setRadius;
+    SettingItem *setCellSize;
 
     std::vector<Entity *> entities;
 };

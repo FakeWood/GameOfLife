@@ -14,8 +14,8 @@
 
 struct Global
 {
-    static const int gFPS;
-    static const int gTimeStep;
+    static int gFPS;
+    static int gTimeStep;
     static int gFrameCounter;
 
     static const int gSCREEN_WIDTH;
@@ -26,6 +26,7 @@ struct Global
     static const Uint8 *gCurrentKeyState;
 
     static int gCellAmount;
+    static int gRadius;
     static int gCellSize;
 };
 

@@ -6,16 +6,6 @@ PlayState PlayState::sPlayState;
 
 PlayState::PlayState()
 {
-    // 3D array
-    world = new int **[2];
-    for (int i = 0; i < 2; i++)
-    {
-        world[i] = new int *[Global::gSCREEN_HEIGHT / Global::gCellSize];
-        for (int y = 0; y < Global::gSCREEN_HEIGHT / Global::gCellSize; y++)
-        {
-            world[i][y] = new int[Global::gSCREEN_WIDTH / Global::gCellSize]{0};
-        }
-    }
 }
 
 PlayState *PlayState::get()
@@ -25,14 +15,19 @@ PlayState *PlayState::get()
 
 bool PlayState::enter()
 {
+    Global::gTimeStep = 1000 / Global::gFPS;
+
     cellH = Global::gSCREEN_HEIGHT / Global::gCellSize;
     cellW = Global::gSCREEN_WIDTH / Global::gCellSize;
 
-    for (int y = 0; y < cellH; y++)
+    // 3D array
+    world = new int **[2];
+    for (int i = 0; i < 2; i++)
     {
-        for (int x = 0; x < cellW; x++)
+        world[i] = new int *[Global::gSCREEN_HEIGHT / Global::gCellSize];
+        for (int y = 0; y < Global::gSCREEN_HEIGHT / Global::gCellSize; y++)
         {
-            world[curWorld][y][x] = 0;
+            world[i][y] = new int[Global::gSCREEN_WIDTH / Global::gCellSize]{0};
         }
     }
 
@@ -88,11 +83,11 @@ void PlayState::update()
         {
             // count neghboring cell
             int count = 0;
-            for (int curY = y - radius; curY <= y + radius; curY++)
+            for (int curY = y - Global::gRadius; curY <= y + Global::gRadius; curY++)
             {
                 if (curY < 0 || curY >= cellH)
                     continue;
-                for (int curX = x - radius; curX <= x + radius; curX++)
+                for (int curX = x - Global::gRadius; curX <= x + Global::gRadius; curX++)
                 {
                     if (curX < 0 || curX >= cellW || (curY == y && curX == x))
                         continue;

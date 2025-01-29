@@ -9,7 +9,7 @@ class Button;
 class SettingItem : public Entity
 {
 public:
-    SettingItem(int p_xPos, int p_yPos, int p_destWidth, int p_destHeight);
+    SettingItem(int *p_target, std::string p_title, int p_delta, int p_xPos, int p_yPos, int p_destWidth, int p_destHeight);
     ~SettingItem();
 
     void handleEvent(SDL_Event &p_event) override;
@@ -23,10 +23,13 @@ private:
     int amountCenterY;
     Button *bDecrease;
     Button *bIncrease;
-    Text *tAmount;
+    Text *tTitle;
+    Text *tNum;
 
+    int *pTarget;
     void decrease();
     void increase();
+    int delta;
 
     std::vector<Entity *> entities;
 };

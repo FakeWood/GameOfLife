@@ -3,25 +3,37 @@
 #include "Entity\Button.hpp"
 #include "Entity\Text.hpp"
 
-SettingItem::SettingItem(int p_xPos, int p_yPos, int p_destWidth, int p_destHeight)
+SettingItem::SettingItem(int *p_target, std::string p_title, int p_delta, int p_xPos, int p_yPos, int p_destWidth, int p_destHeight)
     : Entity("./res/white.png", 32, 32, p_xPos, p_yPos, p_destWidth, p_destHeight)
 {
+    pTarget = p_target;
+
     centerX = p_xPos + (p_destWidth / 2);
     centerY = p_yPos + (p_destHeight / 2);
 
-    int amountYOffset = 30;
+    int amountYOffset = 12;
     amountCenterY = centerY + amountYOffset;
 
+    // text
+    tTitle = new Text();
+    tTitle->loadFont("./res/font/karma.suture-regular.otf", 18);
+    tTitle->setColor(0, 0, 0);
+    tTitle->setText(p_title.c_str());
+    tTitle->setPos(centerX - (tTitle->getW() / 2), centerY - amountYOffset - (tTitle->getH()));
+    entities.emplace_back(tTitle);
+
     // amount number text
-    tAmount = new Text();
-    tAmount->loadFont("./res/font/karma.suture-regular.otf", 18);
-    tAmount->setColor(0, 0, 0);
-    entities.emplace_back(tAmount);
+    tNum = new Text();
+    tNum->loadFont("./res/font/karma.suture-regular.otf", 16);
+    tNum->setColor(0, 0, 0);
+    entities.emplace_back(tNum);
 
     // increase and decrease button
     int buttonXOffset = 24;
-    int buttonSize = 32;
+    int buttonSize = 26;
     int buttonY = amountCenterY - (buttonSize / 2);
+
+    delta = p_delta;
 
     bIncrease = new Button(SDLK_PLUS, "./res/arrow.png", 18, 18, centerX + buttonXOffset, buttonY, buttonSize, buttonSize);
     entities.emplace_back(bIncrease);
@@ -38,14 +50,14 @@ void SettingItem::handleEvent(SDL_Event &p_event)
         e->handleEvent(p_event);
     }
 
-    if (bDecrease->checkPressed() && Global::gCellAmount > 0)
+    if (bDecrease->checkPressed() && *pTarget > 0)
     {
-        Global::gCellAmount -= 50;
+        *pTarget -= delta;
     }
 
     if (bIncrease->checkPressed())
     {
-        Global::gCellAmount += 50;
+        *pTarget += delta;
     }
 }
 
@@ -53,8 +65,8 @@ void SettingItem::update()
 {
     Entity::update();
 
-    tAmount->setText((std::to_string(Global::gCellAmount)).c_str());
-    tAmount->setPos(centerX - (tAmount->getW() / 2), amountCenterY - (tAmount->getH() / 2));
+    tNum->setText((std::to_string(*pTarget)).c_str());
+    tNum->setPos(centerX - (tNum->getW() / 2), amountCenterY - (tNum->getH() / 2));
 
     for (Entity *e : entities)
     {
