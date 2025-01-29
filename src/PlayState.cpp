@@ -1,6 +1,7 @@
 #include "State\PlayState.hpp"
 #include "State\StateMachine.hpp"
 #include "State\ExitState.hpp"
+#include <omp.h>
 
 PlayState PlayState::sPlayState;
 
@@ -77,6 +78,7 @@ void PlayState::update()
     int next = (cur + 1) % 2;
     curWorld = next;
 
+#pragma omp parallel for collapse(2)
     for (int y = 0; y < cellH; y++)
     {
         for (int x = 0; x < cellW; x++)
@@ -98,8 +100,6 @@ void PlayState::update()
                 }
             }
 
-            // if (count != 0)
-            // printf("%d", count);
             // dead
             if (world[cur][y][x] == 0)
             {
