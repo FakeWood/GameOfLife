@@ -21,6 +21,8 @@ bool PlayState::enter()
     cellH = Global::gSCREEN_HEIGHT / Global::gCellSize;
     cellW = Global::gSCREEN_WIDTH / Global::gCellSize;
 
+    pause = false;
+
     // 3D array
     world = new int **[2];
     for (int i = 0; i < 2; i++)
@@ -64,15 +66,23 @@ bool PlayState::exit()
 
 void PlayState::handleEvent(SDL_Event &p_e)
 {
-
-    if (false)
+    if (p_e.type == SDL_KEYDOWN && p_e.key.keysym.scancode == SDL_SCANCODE_SPACE)
     {
-        StateMachine::setNextState(ExitState::get());
+        pause = !pause;
+    }
+    else if (p_e.type == SDL_MOUSEBUTTONDOWN)
+    {
+        int x, y;
+        SDL_GetMouseState(&x, &y);
+
+        world[curWorld][y / Global::gCellSize][x / Global::gCellSize] = world[curWorld][y / Global::gCellSize][x / Global::gCellSize] == 1 ? 0 : 1;
     }
 }
 
 void PlayState::update()
 {
+    if (pause)
+        return;
     // switch cur and next
     int cur = curWorld;
     int next = (cur + 1) % 2;

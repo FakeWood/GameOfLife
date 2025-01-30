@@ -20,6 +20,8 @@ private:
 
     PlayState();
 
+    bool pause = false;
+
     int ***world;
     int curWorld = 0;
 
