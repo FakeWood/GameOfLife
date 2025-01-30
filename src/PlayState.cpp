@@ -83,7 +83,7 @@ void PlayState::handleEvent(SDL_Event &p_e)
             }
             break;
         case SDL_SCANCODE_RIGHT:
-            if (player[0] < cellH - 1)
+            if (player[0] < cellW)
             {
                 player[0] += 1;
             }
@@ -96,7 +96,7 @@ void PlayState::handleEvent(SDL_Event &p_e)
             }
             break;
         case SDL_SCANCODE_DOWN:
-            if (player[1] < cellH - 1)
+            if (player[1] < cellH)
             {
                 player[1] += 1;
             }
