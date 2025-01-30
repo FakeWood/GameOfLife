@@ -102,7 +102,7 @@ void PlayState::handleEvent(SDL_Event &p_e)
             }
             break;
         case SDL_SCANCODE_E:
-            world[curWorld][player[1]][player[0]] = 1;
+            world[curWorld][player[1]][player[0]] = world[curWorld][player[1]][player[0]] == 0 ? 1 : 0;
             break;
         default:
             break;
