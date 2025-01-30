@@ -132,8 +132,12 @@ void PlayState::handleEvent(SDL_Event &p_e)
     {
         int x, y;
         SDL_GetMouseState(&x, &y);
-
-        world[curWorld][y / Global::gCellSize][x / Global::gCellSize] = mouseHold == 1 ? 1 : 0;
+        y = y / Global::gCellSize;
+        x = x / Global::gCellSize;
+        if (y >= 0 && y < cellH && x >= 0 && x < cellW)
+        {
+            world[curWorld][y][x] = mouseHold == 1 ? 1 : 0;
+        }
     }
 }
 
