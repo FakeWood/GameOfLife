@@ -66,6 +66,7 @@ bool StateMachine::init()
         success = false;
     }
     SDL_SetRenderDrawColor(Global::gRenderer, 255, 255, 255, 255);
+    SDL_SetRenderDrawBlendMode(Global::gRenderer, SDL_BLENDMODE_BLEND);
 
     currentState = HomeState::get();
     currentState->enter();

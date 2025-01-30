@@ -22,6 +22,9 @@ bool PlayState::enter()
     cellW = Global::gSCREEN_WIDTH / Global::gCellSize;
 
     pause = false;
+    mouseHold = false;
+    player[0] = cellW / 2; // x
+    player[1] = cellH / 2; // y
 
     // 3D array
     world = new int **[2];
@@ -66,16 +69,71 @@ bool PlayState::exit()
 
 void PlayState::handleEvent(SDL_Event &p_e)
 {
-    if (p_e.type == SDL_KEYDOWN && p_e.key.keysym.scancode == SDL_SCANCODE_SPACE)
+    if (p_e.type == SDL_KEYDOWN)
     {
-        pause = !pause;
+        switch (p_e.key.keysym.scancode)
+        {
+        case SDL_SCANCODE_SPACE:
+            pause = !pause;
+            break;
+        case SDL_SCANCODE_LEFT:
+            if (player[0] > 0)
+            {
+                player[0] -= 1;
+            }
+            break;
+        case SDL_SCANCODE_RIGHT:
+            if (player[0] < cellH - 1)
+            {
+                player[0] += 1;
+            }
+            break;
+
+        case SDL_SCANCODE_UP:
+            if (player[1] > 0)
+            {
+                player[1] -= 1;
+            }
+            break;
+        case SDL_SCANCODE_DOWN:
+            if (player[1] < cellH - 1)
+            {
+                player[1] += 1;
+            }
+            break;
+        case SDL_SCANCODE_E:
+            world[curWorld][player[1]][player[0]] = 1;
+            break;
+        default:
+            break;
+        }
     }
     else if (p_e.type == SDL_MOUSEBUTTONDOWN)
+    {
+        switch (p_e.button.button)
+        {
+        case SDL_BUTTON_LEFT:
+            mouseHold = 1;
+            break;
+        case SDL_BUTTON_RIGHT:
+            mouseHold = 2;
+            break;
+        default:
+            mouseHold = 0;
+            break;
+        }
+    }
+    else if (p_e.type == SDL_MOUSEBUTTONUP)
+    {
+        mouseHold = 0;
+    }
+
+    if (mouseHold != 0)
     {
         int x, y;
         SDL_GetMouseState(&x, &y);
 
-        world[curWorld][y / Global::gCellSize][x / Global::gCellSize] = world[curWorld][y / Global::gCellSize][x / Global::gCellSize] == 1 ? 0 : 1;
+        world[curWorld][y / Global::gCellSize][x / Global::gCellSize] = mouseHold == 1 ? 1 : 0;
     }
 }
 
@@ -152,10 +210,15 @@ void PlayState::render()
             {
                 rect.y = y * Global::gCellSize;
                 rect.x = x * Global::gCellSize;
-                SDL_SetRenderDrawColor(Global::gRenderer, 0x00, 0x00, 0x00, 0x00);
+                SDL_SetRenderDrawColor(Global::gRenderer, 0x00, 0x00, 0x00, 0xFF);
                 SDL_RenderFillRect(Global::gRenderer, &rect);
             }
         }
     }
-    // render grid
+
+    // render player
+    rect.y = player[1] * Global::gCellSize;
+    rect.x = player[0] * Global::gCellSize;
+    SDL_SetRenderDrawColor(Global::gRenderer, 0xFC, 0x11, 0x11, 0x80);
+    SDL_RenderFillRect(Global::gRenderer, &rect);
 }
